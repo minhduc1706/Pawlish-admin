@@ -10,8 +10,20 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
+import { logoutApi } from "@/api/authApi";
+import { useAppDispatch } from "@/store/hooks";
+import { logout } from "@/redux/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const DashboardHeader = () => {
+  const handleLogout = () => {
+    // Add logout logic here
+    logoutApi();
+    dispatch(logout());
+    navigate("/auth");
+  };
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center shadow-md justify-between px-4 bg-white">
       <div className="flex items-center gap-2">
@@ -48,7 +60,7 @@ const DashboardHeader = () => {
               Need Help
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <span className="mr-2">🚪</span>
               Log Out
             </DropdownMenuItem>

@@ -10,7 +10,7 @@ const AuthToggle = ({ isLogin, toggleForm }: AuthToggleProps) => {
     <div className="text-center mt-4">
       <Button
         onClick={toggleForm}
-        className="text-sm text-[#222a63] hover:underline cursor-pointer"
+        className="text-sm bg-white text-black hover:underline cursor-pointer hover:bg-transparent"
       >
         {isLogin
           ? "Don't have an account? Register"

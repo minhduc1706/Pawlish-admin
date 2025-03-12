@@ -59,7 +59,7 @@ const DashboardBreadcrumb = ({ className, maxItems = 4 }: DashboardBreadcrumbPro
           <BreadcrumbList className="flex items-center">
             <BreadcrumbItem>
               <BreadcrumbLink
-                href="/"
+                href="/dashboard"
                 className="flex items-center text-muted-foreground hover:text-foreground transition-colors"
               >
                 <Home className="h-4 w-4" />
