@@ -14,7 +14,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { loginThunk } from "@/redux/auth/authThunk";
 import { useAppDispatch } from "@/store/hooks";
-import { syncCartAfterLogin } from "@/api/cartApi";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -35,10 +34,9 @@ const LoginForm = () => {
 
     if (loginThunk.fulfilled.match(result)) {
       console.log("User login successfully:", result.payload);
-      navigate("/");
-      await syncCartAfterLogin(dispatch);
+      navigate("/dashboard");
     } else {
-      console.error(" Login failed:", result.payload as string);
+      console.error("Login failed:", result.payload);
     }
   };
 
@@ -54,7 +52,7 @@ const LoginForm = () => {
               <FormControl>
                 <Input
                   {...field}
-                  autoComplete="email" 
+                  autoComplete="email"
                   placeholder="Email"
                   className={`w-full ${
                     loginForm.formState.errors.email

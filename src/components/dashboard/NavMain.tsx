@@ -12,6 +12,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useState, useEffect } from "react"
+import { Link } from "react-router-dom"
 
 interface NavItem {
   title: string
@@ -109,13 +110,13 @@ const NavMain = ({
                       {item.items.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild isActive={activeSubItem === subItem.title || subItem.isActive}>
-                            <a
-                              href={subItem.url}
+                            <Link
+                              to={subItem.url}
                               onClick={() => setActiveSubItem(subItem.title)}
                               className="transition-colors duration-200"
                             >
                               <span className="truncate">{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}

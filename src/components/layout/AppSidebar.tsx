@@ -1,4 +1,4 @@
-import type React from "react"
+import type React from "react";
 import {
   Users,
   Scissors,
@@ -13,8 +13,8 @@ import {
   DollarSign,
   LayoutDashboard,
   LogOut,
-} from "lucide-react"
-import NavMain from "@/components/dashboard/NavMain"
+} from "lucide-react";
+import NavMain from "@/components/dashboard/NavMain";
 import {
   Sidebar,
   SidebarContent,
@@ -22,12 +22,15 @@ import {
   SidebarHeader,
   SidebarRail,
   SidebarSeparator,
-} from "@/components/ui/sidebar"
-import NavUser from "@/components/dashboard/NavUser"
-import { useAppSelector } from "@/store/hooks"
-import type { RootState } from "@/store"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import TeamSwitcher from "../dashboard/TeamSwitcher"
+} from "@/components/ui/sidebar";
+import NavUser from "@/components/dashboard/NavUser";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import type { RootState } from "@/store";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import TeamSwitcher from "../dashboard/TeamSwitcher";
+import { logoutApi } from "@/api/authApi";
+import { logout } from "@/redux/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const adminData = {
   user: {
@@ -66,9 +69,9 @@ const adminData = {
       icon: BarChart,
       url: "#",
       items: [
-        { title: "Revenue", url: "/reports/revenue" },
-        { title: "Statistics", url: "/reports/statistics" },
-        { title: "Export Reports", url: "/reports/export" },
+        { title: "Revenue", url: "/revenue" },
+        { title: "Statistics", url: "/statistics" },
+        { title: "Export Reports", url: "/export" },
       ],
     },
     {
@@ -76,8 +79,8 @@ const adminData = {
       icon: Package,
       url: "#",
       items: [
-        { title: "Products", url: "/inventory" },
-        { title: "Restock Orders", url: "/inventory/restock" },
+        { title: "Products", url: "/products" },
+        { title: "Restock Orders", url: "/restocks" },
       ],
     },
     {
@@ -85,11 +88,11 @@ const adminData = {
       icon: Settings,
       url: "#",
       items: [
-        { title: "Payment", url: "/settings/payment" },
-        { title: "Transactions", url: "/settings/transactions" },
-        { title: "Access Control", url: "/settings/access" },
-        { title: "Content", url: "/settings/content" },
-        { title: "Chatbot", url: "/settings/chatbot" },
+        { title: "Payment", url: "/payment" },
+        { title: "Transactions", url: "/transactions" },
+        { title: "Employee Schedules", url: "/employee-schedules" },
+        { title: "Content", url: "/content" },
+        { title: "Chatbot", url: "/chatbot" },
       ],
     },
     {
@@ -97,12 +100,12 @@ const adminData = {
       icon: Bell,
       url: "#",
       items: [
-        { title: "Promotions", url: "/marketing/promotions" },
-        { title: "Notifications", url: "/marketing/notifications" },
+        { title: "Promotions", url: "/promotions" },
+        { title: "Notifications", url: "/notifications" },
       ],
     },
   ],
-}
+};
 
 // Staff navigation data
 const staffData = {
@@ -170,31 +173,41 @@ const staffData = {
       url: "/staff/earnings",
     },
   ],
-}
+};
 
 const getSidebarData = (role: string) => {
   switch (role) {
     case "admin":
-      return adminData
+      return adminData;
     case "staff":
-      return staffData
+      return staffData;
     default:
-      return adminData
+      return adminData;
   }
-}
+};
 
 const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
-  const user = useAppSelector((state: RootState) => state.auth.user)
-  const isAuthenticated = useAppSelector((state: RootState) => state.auth.isAuthenticated)
+    const handleLogout = () => {
+      // Add logout logic here
+      logoutApi();
+      dispatch(logout());
+      navigate("/auth");
+    };
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
+  const user = useAppSelector((state: RootState) => state.auth.user);
+  const isAuthenticated = useAppSelector(
+    (state: RootState) => state.auth.isAuthenticated
+  );
 
-  const role = user?.role || "admin"
-  const sidebarData = getSidebarData(role)
+  const role = user?.role || "admin";
+  const sidebarData = getSidebarData(role);
 
-  const mainNavItems = sidebarData.navMain.slice(0, 4)
-  const secondaryNavItems = sidebarData.navMain.slice(4)
+  const mainNavItems = sidebarData.navMain.slice(0, 4);
+  const secondaryNavItems = sidebarData.navMain.slice(4);
 
   if (!isAuthenticated && process.env.NODE_ENV === "production") {
-    return null
+    return null;
   }
 
   return (
@@ -231,15 +244,14 @@ const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
             {
               label: "Logout",
               icon: LogOut,
-              onClick: () => console.log("Logout clicked"),
+              onClick: () => handleLogout(),
             },
           ]}
         />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
-}
+  );
+};
 
-export default AppSidebar
-
+export default AppSidebar;
